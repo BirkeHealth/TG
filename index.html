@@ -212,6 +212,28 @@
       transition: transform .2s, box-shadow .2s;
     }
     .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(165,255,87,.4); }
+    /* quote form */
+    .quote-wrap { scroll-margin-top: 90px; }
+    .quote-intro { color: var(--muted); font-size: .9rem; margin: -.5rem 0 1.25rem; }
+    .form-field select {
+      background: var(--white); border: 1.5px solid #c8dece;
+      border-radius: 10px; padding: .75rem 1rem;
+      font-family: var(--font); font-size: .93rem; color: var(--black); outline: none;
+    }
+    .form-field select:focus { border-color: var(--green); }
+    .quote-consent { margin-bottom: 1rem; }
+    .quote-consent label { display: flex; gap: .75rem; align-items: flex-start; font-size: .74rem; line-height: 1.55; color: var(--muted); cursor: pointer; }
+    .quote-consent strong { color: var(--black); }
+    .quote-consent input { margin-top: .2rem; width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--green); }
+    .has-error input, .has-error select { border-color: #d93025 !important; }
+    .field-error { color: #d93025; font-size: .78rem; }
+    .quote-consent .field-error { display: block; margin: .4rem 0 0 1.9rem; }
+    .quote-status { color: #d93025; font-size: .88rem; min-height: 1em; margin-top: .6rem; }
+    .btn-submit:disabled { opacity: .6; cursor: wait; transform: none; }
+    .quote-form[hidden] { display: none !important; }
+    .quote-hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+    .quote-success a { color: var(--green-deep); font-weight: 700; }
+    .quote-success:not([hidden]) { display: block; }
     .form-success { display: none; background: #e8f5ee; border: 1px solid var(--green); border-radius: 10px; padding: 1rem; color: var(--green-deep); font-size: .9rem; text-align: center; margin-top: .75rem; }
 
     /* ── SOCIAL ── */
@@ -257,7 +279,7 @@
 
 <!-- PROMO BANNER -->
 <div class="promo-banner">
-  🩺 Planes médicos de $0! Llama HOY — <a href="https://docs.google.com/forms/d/1iYMo63F3WfqqLfv6BQO9SVCVUnEAaER_DN6VmMwuMAc/preview" target="_blank">Obtén más información sobre seguros médicos.</a>
+  🩺 Planes médicos de $0! Llama HOY — <a href="#cotizar">Obtén más información sobre seguros médicos.</a>
 </div>
 
 <!-- NAV -->
@@ -270,7 +292,7 @@
     <li><a href="#nosotros">Nosotros</a></li>
     <li><a href="#opiniones">Opiniones</a></li>
     <li><a href="#contacto">Contacto</a></li>
-    <li><a href="https://docs.google.com/forms/d/1iYMo63F3WfqqLfv6BQO9SVCVUnEAaER_DN6VmMwuMAc/preview" target="_blank" class="nav-cta">Cotizar</a></li>
+    <li><a href="#cotizar" class="nav-cta">Cotizar</a></li>
   </ul>
   <button class="hamburger" id="menuBtn" aria-label="Menú">
     <span></span><span></span><span></span>
@@ -291,7 +313,7 @@
         Tu Guardián es tu aliado de confianza para navegar el complejo mundo del seguro médico. Planes ACA del marketplace, simples y personalizados para ti.
       </p>
       <div class="hero-btns">
-        <a href="https://docs.google.com/forms/d/1iYMo63F3WfqqLfv6BQO9SVCVUnEAaER_DN6VmMwuMAc/preview" target="_blank" class="btn-pill btn-green">✦ Presiona Aquí — Para Una Cotización</a>
+        <a href="#cotizar" class="btn-pill btn-green">✦ Presiona Aquí — Para Una Cotización</a>
         <a href="tel:+13053071982" class="btn-pill btn-yellow">📞 Llama al 305-307-1982</a>
       </div>
     </div>
@@ -458,18 +480,80 @@
       </div>
     </div>
 
-    <div>
-      <p class="form-title">Contáctanos Por Correo</p>
-      <form id="contactForm" action="https://formspree.io/f/your-form-id" method="POST">
+    <div id="cotizar" class="quote-wrap">
+      <p class="form-title">Solicitud de Seguro Médico</p>
+      <p class="quote-intro">Llene su información básica y un agente licenciado le contactará lo más pronto posible. ¡Gracias por su voto de confianza!</p>
+      <form class="quote-form" data-site="tuguardian" data-lang="es"
+            data-endpoint="https://bha-crm.onrender.com/api/public/quote-request" novalidate>
         <div class="form-row">
-          <div class="form-field"><label>Nombre</label><input type="text" name="nombre" placeholder="Tu nombre"></div>
-          <div class="form-field"><label>Correo *</label><input type="email" name="email" placeholder="tu@correo.com" required></div>
+          <div class="form-field">
+            <label for="q-first">Nombre *</label>
+            <input type="text" id="q-first" name="firstName" autocomplete="given-name" maxlength="60">
+          </div>
+          <div class="form-field">
+            <label for="q-last">Apellido *</label>
+            <input type="text" id="q-last" name="lastName" autocomplete="family-name" maxlength="60">
+          </div>
         </div>
-        <div class="form-field"><label>Teléfono</label><input type="tel" name="telefono" placeholder="(305) 000-0000"></div>
-        <div class="form-field"><label>Notas</label><textarea name="notas" placeholder="Cuéntanos cómo podemos ayudarte..."></textarea></div>
-        <button type="submit" class="btn-submit">Enviar Mensaje →</button>
-        <div id="formSuccess" class="form-success">✅ ¡Gracias! Te contactaremos pronto.</div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="q-dob">Fecha de nacimiento *</label>
+            <input type="date" id="q-dob" name="dob" autocomplete="bday" min="1900-01-01">
+          </div>
+          <div class="form-field">
+            <label for="q-phone">Teléfono *</label>
+            <input type="tel" id="q-phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="(305) 000-0000" maxlength="20">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="q-email">Correo electrónico</label>
+            <input type="email" id="q-email" name="email" autocomplete="email" placeholder="tu@correo.com" maxlength="120">
+          </div>
+          <div class="form-field">
+            <label for="q-zip">Código postal *</label>
+            <input type="text" id="q-zip" name="zip" autocomplete="postal-code" inputmode="numeric" maxlength="5" placeholder="33126">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="q-people">¿Cuántas personas quiere asegurar? *</label>
+            <select id="q-people" name="people">
+              <option value="">Elija…</option>
+              <option value="1">1 – Individual</option>
+              <option value="2">2 – Personas</option>
+              <option value="3+">3 o más – Plan familiar</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="q-income">Ingresos anuales del hogar (antes de impuestos) *</label>
+            <select id="q-income" name="income">
+              <option value="">Elija…</option>
+              <option value="0-21000">$0 a $21,000</option>
+              <option value="21000-45000">$21,000 a $45,000</option>
+              <option value="45000-80000">$45,000 a $80,000</option>
+              <option value="80000+">$80,000 o más</option>
+            </select>
+          </div>
+        </div>
+        <div class="quote-hp" aria-hidden="true">
+          <label for="q-company">Empresa</label>
+          <input type="text" id="q-company" name="company" tabindex="-1" autocomplete="off">
+        </div>
+        <div class="quote-consent">
+          <label>
+            <input type="checkbox" name="consent">
+            <span><strong>Consentimiento de comunicaciones y uso de datos *</strong><br>
+            Autorizo a Birke Health Agency LLC, también operando como Tuguardianteasegura.com, a contactarme por teléfono, mensaje de texto o correo electrónico con información sobre cotizaciones o inscripción en seguros de salud, y a compartir mi información con fines comerciales legítimos. Doy mi consentimiento expreso por escrito conforme a la Ley de Protección al Consumidor Telefónico (TCPA), 47 U.S.C. § 227 y 47 C.F.R. § 64.1200, y la Ley CAN-SPAM, entendiendo que puedo revocar este consentimiento en cualquier momento respondiendo “STOP” o usando el enlace de baja correspondiente.</span>
+          </label>
+        </div>
+        <button type="submit" class="btn-submit">✦ Quiero Mi Cotización</button>
+        <p class="quote-status" role="alert"></p>
       </form>
+      <div class="form-success quote-success" tabindex="-1" hidden>
+        ✅ ¡Gracias! Un agente licenciado le contactará pronto.<br>
+        ¿Necesita ayuda ahora? Llame al <a href="tel:+13053071982">(305) 307-1982</a>.
+      </div>
     </div>
   </div>
 </section>
@@ -495,17 +579,8 @@
   </div>
 </footer>
 
+<script src="quote-form.js" defer></script>
 <script>
-  // Form
-  const form = document.getElementById('contactForm');
-  const success = document.getElementById('formSuccess');
-  form.addEventListener('submit', e => {
-    if (form.action.includes('your-form-id')) {
-      e.preventDefault();
-      form.style.opacity = '.5';
-      setTimeout(() => { form.style.opacity = '1'; success.style.display = 'block'; form.reset(); }, 600);
-    }
-  });
   // Hamburger
   document.getElementById('menuBtn').addEventListener('click', () => {
     const ul = document.querySelector('.nav-links');
