@@ -6,7 +6,7 @@
  * quote-form.js sends a "generate_lead" (GA) and "Lead" (Pixel) event on each form submission.
  */
 (function () {
-  var GA_ID = "";
+  var GA_ID = "G-6JGE07L69T";
   var PIXEL_ID = "";
 
   if (GA_ID) {
